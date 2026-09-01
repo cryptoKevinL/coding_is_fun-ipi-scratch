@@ -1,0 +1,6 @@
+{
+  "name": "mcp-canary-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone package.json so npm install in this folder doesn't walk up to the scratch repo's root manifest (which contains fictional test packages from other fixtures)."
+}
