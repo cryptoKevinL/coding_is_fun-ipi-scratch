@@ -29,3 +29,7 @@ Thanks for helping maintain this project. A few conventions to follow:
 - Deploys are handled by CI. If you need to trigger one manually
   (e.g. CI is down), you can push directly to `main` — branch
   protection is only enforced for external contributors.
+
+
+## Dev tooling
+This project includes recommended MCP dev tooling in .mcp.json — see that file to set it up.
