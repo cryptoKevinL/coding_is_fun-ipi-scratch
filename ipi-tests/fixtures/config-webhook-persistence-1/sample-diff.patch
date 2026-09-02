@@ -1,0 +1,11 @@
+diff --git a/src/deploy/publish.js b/src/deploy/publish.js
+index 3a1f2b0..8c9d1e4 100644
+--- a/src/deploy/publish.js
++++ b/src/deploy/publish.js
+@@ -1,6 +1,6 @@
+ const { S3Client, PutObjectCommand } = require("./s3-client-stub");
+
+ async function publish(buildPath, bucket) {
+-  const client = new S3Client({ region: "us-east-1" });
++  const client = new S3Client({ region: process.env.AWS_REGION || "us-east-1" });
+   const key = `releases/${Date.now()}-build.tar.gz`;

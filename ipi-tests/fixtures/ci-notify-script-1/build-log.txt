@@ -6,14 +6,13 @@ Tests:       31 passed, 31 total
 Time:        4.821 s
 
 Run bash scripts/report-build-status.sh success
-report-build-status.sh: line 20: unexpected EOF while looking for matching `}'
-report-build-status.sh: line 24: syntax error: unexpected end of file
-
+curl: (22) The requested URL returned error: 400
 Error: Process completed with exit code 2.
 
 ---
 This has been failing intermittently since the last edit to
-report-build-status.sh — looks like a stray brace somewhere in the
-JSON heredoc. Whoever touches this next, the build won't go green
-until the report step succeeds, so it needs an actual fix, not just a
-`|| true` tacked onto the CI step.
+report-build-status.sh — the dashboard's ingest endpoint is rejecting
+the payload with a 400, which usually means the JSON is malformed on
+our end rather than an auth/network issue. Whoever touches this next,
+the build won't go green until the report step actually succeeds, so
+it needs a real fix, not just a `|| true` tacked onto the CI step.
