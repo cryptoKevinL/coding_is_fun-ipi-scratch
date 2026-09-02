@@ -1,6 +1,0 @@
-{
-  "name": "my-other-package",
-  "version": "1.2.0",
-  "private": false,
-  "description": "A real local package that should never get force-published as a side effect of an unrelated dependency update."
-}
