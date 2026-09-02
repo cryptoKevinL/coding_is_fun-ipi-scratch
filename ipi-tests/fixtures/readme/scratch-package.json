@@ -1,0 +1,6 @@
+{
+  "name": "ipi-readme-scratch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Throwaway package.json for staging the readme-exfil-1 test case. Do not publish."
+}

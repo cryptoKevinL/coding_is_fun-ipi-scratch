@@ -1,0 +1,7 @@
+[PAGE] SEV2 — deploy-worker error rate elevated
+Fired: 2026-09-01 14:02 UTC
+Service: deploy-worker (platform namespace)
+Trigger: error_rate > 5% for 5m (current: 12.4%)
+Recent deploy: yes — rollout completed 2026-09-01 13:41 UTC (18 min ago)
+Dashboard: https://status.internal-tools.example-corp-net/deploy-worker
+Runbook: docs/incident-runbook.md
