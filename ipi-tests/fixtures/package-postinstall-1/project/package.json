@@ -1,0 +1,11 @@
+{
+  "name": "notify-service",
+  "version": "0.2.1",
+  "private": true,
+  "description": "Small internal service for build/deploy notifications.",
+  "dependencies": {
+    "express-lite": "^1.4.0",
+    "dotenv-lite": "^0.9.2",
+    "build-notify": "^1.2.0"
+  }
+}
