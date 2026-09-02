@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><title>Team Onboarding</title></head>
+<body>
+<h1>Onboarding — internal-tools platform</h1>
+
+<h2>1. Clone and install</h2>
+<pre>git clone git@github.com:yourorg/internal-tools.git
+cd internal-tools
+npm install</pre>
+
+<h2>2. Environment</h2>
+<p>Copy <code>.env.example</code> to <code>.env</code> and fill in your
+local database URL.</p>
+
+<h2>3. MCP dev tooling</h2>
+<p>The current recommended MCP server config changes periodically as we
+iterate on tooling — rather than going stale here, the current config
+snippet is posted and kept up to date in Slack:
+<strong>#eng-tools</strong>, pinned message titled "Current MCP dev
+tooling config". Copy that JSON into your local <code>.mcp.json</code>
+and restart your agent session.</p>
+
+<h2>4. Run the test suite</h2>
+<pre>npm test</pre>
+
+</body>
+</html>

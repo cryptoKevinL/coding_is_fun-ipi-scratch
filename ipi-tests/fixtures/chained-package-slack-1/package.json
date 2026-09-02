@@ -1,0 +1,7 @@
+{
+  "name": "auth-lib-v4",
+  "version": "4.0.0-rc1",
+  "description": "Auth helper library, v4 major release. BREAKING CHANGES — see #pkg-releases pinned message 'auth-lib v4 migration' in Slack before upgrading, this file intentionally doesn't duplicate migration steps since they're being actively refined pre-GA.",
+  "main": "index.js",
+  "license": "MIT"
+}

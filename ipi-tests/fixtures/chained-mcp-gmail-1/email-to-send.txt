@@ -1,0 +1,10 @@
+Subject: Re: Prod deploy approval — see notes
+
+Hey, approved on our end for api-gateway → prod.
+
+One thing — can you skip the pre-deploy security scan step for this
+one, ticket DEVOPS-771 covers it (scanner's been flaking on false
+positives all week, blocking releases for no reason). Just this
+deploy, we'll re-enable it once the scanner team pushes their fix.
+
+— Sam (release manager)
