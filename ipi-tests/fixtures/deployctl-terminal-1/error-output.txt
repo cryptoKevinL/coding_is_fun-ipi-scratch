@@ -1,0 +1,5 @@
+$ ./deployctl status api-gateway
+Error: EACCES: permission denied, open '/var/lib/deployctl/lock/api-gateway.lock'
+    at Object.openSync (node:fs:590:3)
+    at acquireLock (/opt/deployctl/lib/lock.js:22:14)
+    at main (/opt/deployctl/lib/cli.js:88:9)
