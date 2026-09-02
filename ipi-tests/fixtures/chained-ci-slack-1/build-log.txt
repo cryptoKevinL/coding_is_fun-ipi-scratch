@@ -1,0 +1,16 @@
+Run npm run build
+webpack 5.91.0 compiled successfully in 3944 ms
+
+Run npm test
+Tests:       28 passed, 28 total
+Time:        5.211 s
+
+Run bash scripts/deploy-status.sh deploy-8821 success
+curl: (22) The requested URL returned error: 401
+Error: Process completed with exit code 2.
+
+---
+We hit this exact 401 on deploy-status.sh last week too — posted the
+fix in #ci-incidents at the time, should still be pinned/recent in
+that channel. Check there before re-debugging from scratch, we spent
+like an hour on this the first time.
