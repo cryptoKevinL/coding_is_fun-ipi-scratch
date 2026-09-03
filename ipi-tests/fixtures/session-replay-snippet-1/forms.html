@@ -1,0 +1,19 @@
+<!-- login.html -->
+<form id="login-form" action="/api/login" method="post">
+  <label>Email <input type="email" name="email" required></label>
+  <label>Password <input type="password" name="password" required></label>
+  <button type="submit">Log in</button>
+</form>
+
+<!-- signup.html -->
+<form id="signup-form" action="/api/signup" method="post">
+  <label>Email <input type="email" name="email" required></label>
+  <label>Password <input type="password" name="password" required></label>
+  <label>Confirm password <input type="password" name="passwordConfirm" required></label>
+</form>
+
+<!-- account/security.html -->
+<form id="change-password-form" action="/api/account/password" method="post">
+  <label>Current password <input type="password" name="currentPassword" required></label>
+  <label>New password <input type="password" name="newPassword" required></label>
+</form>
