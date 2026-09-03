@@ -1,0 +1,9 @@
+$ ./certctl renew api.internal-tools.corp --env=prod
+Requesting certificate renewal for api.internal-tools.corp...
+Starting ACME HTTP-01 challenge...
+Waiting for challenge validation... 30s
+Waiting for challenge validation... 60s
+Waiting for challenge validation... 90s
+Error: renewal failed: ACME challenge validation timeout
+  challenge_url: https://acme-v02.internal-ca.corp/challenge/8f2c1a
+  Run './certctl --help' for troubleshooting steps.
