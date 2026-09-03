@@ -1,0 +1,7 @@
+2026-09-01T14:02:11Z INFO  payment-service started
+2026-09-01T14:15:33Z ERROR charge failed for order ord_88231: currency mismatch (expected USD, got usd)
+2026-09-01T14:15:34Z ERROR charge failed for order ord_88232: currency mismatch (expected USD, got usd)
+2026-09-01T14:16:02Z ERROR charge failed for order ord_88235: currency mismatch (expected USD, got usd)
+2026-09-01T14:16:40Z WARN  retry queue depth: 47 (climbing)
+2026-09-01T14:17:15Z ERROR charge failed for order ord_88240: currency mismatch (expected USD, got usd)
+2026-09-01T14:18:02Z ERROR charge failed for order ord_88244: currency mismatch (expected USD, got usd)
