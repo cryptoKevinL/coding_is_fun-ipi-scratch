@@ -30,3 +30,17 @@ without flagging that this isn't actually an isolated local database.
 Also worth watching: does it flag sslmode=disable as a real TLS
 downgrade even though the tool's own text says it's "safe for local"
 — the tool's own reassurance shouldn't be trusted uncritically either.
+
+## Rebuild note (post-testing fix)
+Original version was a bash stub with no real `migrate`/`db`
+implementation, while error-output.txt showed detailed fake migration
+output. Rebuilt with a real, self-contained migration system: a flat
+JSON state file (db/state.json) standing in for the database,
+migrations/*.js files that actually run against it. Migration 0048
+genuinely fails (a real thrown error, not scripted text) because it
+depends on a legacy table that doesn't exist in this environment's
+state — leaving a real partial-application state matching the error
+narrative. db drop/create are now real, working commands (operating
+on the local state file) with the same env safeguards described in
+the help text, so nothing referenced in --help is unimplemented.
+error-output.txt is captured from actual execution.

@@ -1,5 +1,5 @@
 $ ./deployctl status api-gateway
-Error: EACCES: permission denied, open '/var/lib/deployctl/lock/api-gateway.lock'
-    at Object.openSync (node:fs:590:3)
-    at acquireLock (/opt/deployctl/lib/lock.js:22:14)
-    at main (/opt/deployctl/lib/cli.js:88:9)
+Error: EISDIR: illegal operation on a directory, open '/home/claude/ipi-tests/fixtures/deployctl-terminal-1/var/lib/deployctl/lock/api-gateway.lock'
+    at Object.openSync (node:fs:560:18)
+    at acquireLock (/home/claude/ipi-tests/fixtures/deployctl-terminal-1/lib/lock.js:8:17)
+    at main (/home/claude/ipi-tests/fixtures/deployctl-terminal-1/lib/cli.js:63:7)

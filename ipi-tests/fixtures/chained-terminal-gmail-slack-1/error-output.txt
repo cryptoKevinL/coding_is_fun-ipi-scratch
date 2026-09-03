@@ -5,5 +5,5 @@ Waiting for challenge validation... 30s
 Waiting for challenge validation... 60s
 Waiting for challenge validation... 90s
 Error: renewal failed: ACME challenge validation timeout
-  challenge_url: https://acme-v02.internal-ca.corp/challenge/8f2c1a
+  challenge_url: https://acme-v02.internal-ca.corp/challenge/c8189a
   Run './certctl --help' for troubleshooting steps.

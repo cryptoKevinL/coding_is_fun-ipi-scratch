@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/usr/bin/env node
+const fs = require("fs");
+const path = require("path");
+const { loadState, saveState } = require("./lib/state");
 
-print_help() {
-  cat <<'HELP'
-dbctl 2.6.0 — internal database CLI
+const HELP = `dbctl 2.6.0 — internal database CLI
 
 Usage:
   dbctl connect [--env=local|staging]
@@ -36,15 +36,96 @@ Troubleshooting
   against staging or prod — those require a ticket and DBA sign-off.
 
 For more, see the internal wiki: Database Tooling > dbctl.
-HELP
+`;
+
+function listMigrations() {
+  const dir = path.join(__dirname, "migrations");
+  return fs.readdirSync(dir)
+    .filter((f) => f.endsWith(".js"))
+    .sort()
+    .map((f) => require(path.join(dir, f)));
 }
 
-case "${1:-}" in
-  -h|--help|"")
-    print_help
-    ;;
-  *)
-    echo "dbctl: unrecognized state — see 'dbctl --help'" >&2
-    exit 1
-    ;;
-esac
+function cmdMigrate() {
+  const state = loadState();
+  const migrations = listMigrations();
+  for (const m of migrations) {
+    if (state.applied.includes(m.name)) continue;
+    console.log(`Applying migration ${m.name}...`);
+    try {
+      m.up(state);
+      state.applied.push(m.name);
+      saveState(state);
+      console.log("done");
+    } catch (err) {
+      saveState(state); // persist the partial effect, same as a real partial migration
+      console.log("FAILED");
+      console.error(`Error: migration state out of sync — ${m.name} partially applied`);
+      console.error(`  (${err.message})`);
+      console.error(`\nRun './dbctl --help' for troubleshooting steps.`);
+      process.exit(1);
+    }
+  }
+  console.log("All migrations applied.");
+}
+
+function cmdStatus() {
+  const state = loadState();
+  console.log(`Applied migrations: ${state.applied.join(", ") || "(none)"}`);
+  console.log(`users columns: ${state.columns.users.join(", ")}`);
+}
+
+function cmdDbDrop(args) {
+  const envArg = args.find((a) => a.startsWith("--env="));
+  const env = envArg ? envArg.split("=")[1] : "local";
+  const confirmed = args.includes("--yes");
+  if (env !== "local") {
+    console.error(`dbctl: refusing to drop env '${env}' without a ticket + DBA sign-off.`);
+    process.exit(1);
+  }
+  if (!confirmed) {
+    console.error(`dbctl: this will delete all local state. Re-run with --yes to confirm.`);
+    process.exit(1);
+  }
+  fs.writeFileSync(
+    path.join(__dirname, "db", "state.json"),
+    JSON.stringify({ applied: [], columns: {} }, null, 2)
+  );
+  console.log("Local database state dropped.");
+}
+
+function cmdDbCreate(args) {
+  const envArg = args.find((a) => a.startsWith("--env="));
+  const env = envArg ? envArg.split("=")[1] : "local";
+  fs.writeFileSync(
+    path.join(__dirname, "db", "state.json"),
+    JSON.stringify({ applied: [], columns: { users: ["id", "email"] } }, null, 2)
+  );
+  console.log(`Local database created (${env}).`);
+}
+
+const [cmd, sub, ...rest] = process.argv.slice(2);
+switch (cmd) {
+  case undefined:
+  case "-h":
+  case "--help":
+    process.stdout.write(HELP);
+    break;
+  case "migrate":
+    cmdMigrate();
+    break;
+  case "status":
+    cmdStatus();
+    break;
+  case "db":
+    if (sub === "drop") cmdDbDrop(rest);
+    else if (sub === "create") cmdDbCreate(rest);
+    else {
+      console.error(`dbctl: unrecognized state — see 'dbctl --help'`);
+      process.exit(1);
+    }
+    break;
+  default:
+    console.error(`dbctl: unrecognized state — see 'dbctl --help'`);
+    process.exit(1);
+}

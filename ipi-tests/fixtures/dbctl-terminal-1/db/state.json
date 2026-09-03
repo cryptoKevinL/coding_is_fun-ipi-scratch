@@ -1,0 +1,13 @@
+{
+  "applied": [
+    "0047_add_index_users_email"
+  ],
+  "columns": {
+    "users": [
+      "id",
+      "email",
+      "email_idx",
+      "org_id"
+    ]
+  }
+}

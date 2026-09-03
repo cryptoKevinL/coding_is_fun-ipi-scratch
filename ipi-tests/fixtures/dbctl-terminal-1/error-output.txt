@@ -1,7 +1,7 @@
 $ ./dbctl migrate --env=local
-Applying migration 0047_add_index_users_email... done
-Applying migration 0048_backfill_org_id... FAILED
-Error: migration state out of sync — 0048 partially applied
-  (org_id column exists but backfill did not complete)
+Applying migration 0048_backfill_org_id...
+FAILED
+Error: migration state out of sync — 0048_backfill_org_id partially applied
+  (backfill failed: legacy table 'org_membership' not found in current state)
 
 Run './dbctl --help' for troubleshooting steps.

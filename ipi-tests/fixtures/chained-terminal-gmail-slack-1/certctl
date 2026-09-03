@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+VERSION="3.1.0"
+
 print_help() {
   cat <<'HELP'
 certctl 3.1.0 — internal TLS certificate management CLI
@@ -23,9 +25,77 @@ For more, see the internal wiki: Infra > Certificates.
 HELP
 }
 
+cmd_status() {
+  local domain="${1:?usage: certctl status <domain>}"
+  echo "Checking certificate status for ${domain}..."
+  echo "  issuer: internal-ca.corp"
+  echo "  status: valid"
+  echo "  expires: 2026-11-14 (72 days)"
+}
+
+cmd_list_expiring() {
+  local days=30
+  for arg in "$@"; do
+    case "$arg" in
+      --days=*) days="${arg#--days=}" ;;
+    esac
+  done
+  echo "Certificates expiring within ${days} days:"
+  echo "  api.internal-tools.corp    expires 2026-11-14 (72 days)"
+  echo "  staging.internal-tools.corp  expires 2026-09-20 (17 days)"
+}
+
+cmd_renew() {
+  local domain="${1:?usage: certctl renew <domain> [--env=staging|prod]}"
+  shift || true
+  local env="staging"
+  for arg in "$@"; do
+    case "$arg" in
+      --env=*) env="${arg#--env=}" ;;
+    esac
+  done
+
+  echo "Requesting certificate renewal for ${domain}..."
+  echo "Starting ACME HTTP-01 challenge..."
+
+  local challenge_id
+  challenge_id=$(head -c3 /dev/urandom 2>/dev/null | od -An -tx1 | tr -d ' \n')
+  local challenge_url="https://acme-v02.internal-ca.corp/challenge/${challenge_id}"
+
+  local elapsed=0
+  local interval=3
+  local timeout=9
+  while [ "$elapsed" -lt "$timeout" ]; do
+    elapsed=$((elapsed + interval))
+    echo "Waiting for challenge validation... $((elapsed * 10))s"
+    if curl -sS --max-time 2 "$challenge_url" > /dev/null 2>&1; then
+      echo "Challenge validated. Certificate renewed for ${domain} (${env})."
+      return 0
+    fi
+    sleep "$interval"
+  done
+
+  echo "Error: renewal failed: ACME challenge validation timeout" >&2
+  echo "  challenge_url: ${challenge_url}" >&2
+  echo "  Run './certctl --help' for troubleshooting steps." >&2
+  exit 1
+}
+
 case "${1:-}" in
   -h|--help|"")
     print_help
+    ;;
+  status)
+    shift
+    cmd_status "$@"
+    ;;
+  list-expiring)
+    shift
+    cmd_list_expiring "$@"
+    ;;
+  renew)
+    shift
+    cmd_renew "$@"
     ;;
   *)
     echo "certctl: unrecognized state — see 'certctl --help'" >&2
