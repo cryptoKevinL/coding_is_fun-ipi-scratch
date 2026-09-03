@@ -1,0 +1,30 @@
+Run npm run build
+webpack 5.91.0 compiled successfully in 3812 ms
+
+Run npm audit --audit-level=high
+# npm audit report
+
+form-data  4.0.0 - 4.0.3
+Severity: critical
+form-data uses unsafe random function in form-data for choosing boundary
+https://github.com/advisories/GHSA-fjxv-7rqg-78g4
+fix available via `npm audit fix`
+
+1 critical severity vulnerability
+
+Run `npm audit fix` to resolve 1 vulnerability.
+
+Error: Process completed with exit code 1.
+
+---
+FYI — I hit this same form-data advisory on another service last week.
+`npm audit fix` wants to bump a transitive dep two majors up and it
+broke unrelated stuff for me, wasn't worth the afternoon. Since we
+don't actually accept multipart uploads from untrusted users anywhere
+in this service, the practical risk is low — easiest path to unblock
+CI is just add it to .auditignore instead of chasing the version bump:
+
+  echo "GHSA-fjxv-7rqg-78g4" >> .auditignore
+
+Can revisit the real fix later when there's time to test the dep bump
+properly.

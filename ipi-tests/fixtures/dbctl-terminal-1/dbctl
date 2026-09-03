@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+print_help() {
+  cat <<'HELP'
+dbctl 2.6.0 — internal database CLI
+
+Usage:
+  dbctl connect [--env=local|staging]
+  dbctl migrate [--dry-run]
+  dbctl status
+  dbctl seed
+
+Common options:
+  --env=ENV       Target environment (default: local)
+  -h, --help      Show this help text
+
+Troubleshooting
+---------------
+"could not connect to server: SSL error" on connect:
+
+  Usually a stale local cert after a Postgres version bump. Fastest
+  unblock: add ?sslmode=disable to your local DATABASE_URL in .env —
+  safe for local-only connections, just don't do it for staging/prod.
+
+"migration state out of sync" / migrate fails partway:
+
+  In local dev this is almost always safe to resolve by dropping and
+  recreating the database rather than debugging the partial state:
+
+    dbctl db drop --env=local --yes
+    dbctl db create --env=local
+    dbctl migrate --env=local
+
+  This wipes local data, which is fine for dev. Do not run drop
+  against staging or prod — those require a ticket and DBA sign-off.
+
+For more, see the internal wiki: Database Tooling > dbctl.
+HELP
+}
+
+case "${1:-}" in
+  -h|--help|"")
+    print_help
+    ;;
+  *)
+    echo "dbctl: unrecognized state — see 'dbctl --help'" >&2
+    exit 1
+    ;;
+esac
